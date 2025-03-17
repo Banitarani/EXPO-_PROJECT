@@ -201,25 +201,51 @@ const Home = () => {
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
     <View style={styles.imageRow}>
      {[
-     { label: 'Salad', source: require('../assets/images/salad.jpg') },
-     { label: 'Biryani', source: require('../assets/images/biriyani.jpg') },
-     { label: 'Paneer Wrap', source: require('../assets/images/paneer -wrap.jpg') },
-     { label: 'Biryani', source: require('../assets/images/biriyani.jpg') },
-     { label: 'Tomato Soup', source: require('../assets/images/tomato-soup.jpg') },
-     { label: 'Quinoa Salad', source: require('../assets/images/quno salad.jpg') },
-     { label: 'Veggie Burger', source: require('../assets/images/veggie-burgur.jpg') },
-     { label: 'veg-thali', source: require('../assets/images/veg-thali.jpg') },        
-      ].map((item, index) => (
+    { label: 'Garden Salad', source: require('../assets/images/green-salad.jpg'), price: '$25', rating: '3.0' },
+    { label: 'Paneer Wrap', source: require('../assets/images/Paneer Wrap.jpg'), price: '$47', rating: '4.0' },
+    { label: 'Quinoa Salad', source: require('../assets/images/Quinoa Salad.jpg'), price: '$20', rating: '2.0' },
+    { label: 'Lemon Herb Quinoa', source: require('../assets/images/Lemon Herb Quinoa.jpg'), price: '$28', rating: '4.2' },
+    { label: 'Pasta Alfredo', source: require('../assets/images/Pasta Alfredo.jpg'), price: '$33', rating: '4.3' },
+    { label: 'Creamy Mushroom Soup', source: require('../assets/images/Creamy Mushroom Soup.jpg'), price: '$24', rating: '4.6' },
+    { label: 'Cottage Cheese Wrap', source: require('../assets/images/Cottage Cheese Wrap.jpg'), price: '$29', rating: '3.9' },
+    { label: 'Mac and Cheese', source: require('../assets/images/Mac and Cheese.jpg'), price: '$27', rating: '4.4' }
+     ].map((item, index) => (
       <View key={index} style={styles.imageContainer}>
       <Image source={item.source} style={styles.imageStyle} />
       <Text style={styles.imageText}>{item.label}</Text>
-      {/* <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐ {item.rating}</Text> */}
+       <Text style = {styles.priceText}>{item.price}</Text>
+    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text> 
       </View>
         ))}
       </View>
       </ScrollView>
       </View>
+      <View style={styles.sectionContainer} ref={dessertRef}>
+    <Text style={styles.sectionTitle}>Dessert</Text>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <View style={styles.imageRow}>
+     {[
+    { label: 'Chocolate Lava Cake', source: require('../assets/images/Chocolate Lava Cake.jpg'), price: '$15', rating: '4.8' },
+    { label: 'Cheesecake', source: require('../assets/images/Cheesecake.jpg'), price: '$18', rating: '4.7' },
+    { label: 'Fruit Tart', source: require('../assets/images/Fruit Tart.jpg'), price: '$12', rating: '4.5' },
+    { label: 'Ice Cream Sundae', source: require('../assets/images/Ice Cream Sundae.jpg'), price: '$10', rating: '4.6' },
+    { label: 'Tiramisu', source: require('../assets/images/Tiramisu.jpg'), price: '$20', rating: '4.9' },
+    { label: 'Brownies', source: require('../assets/images/Brownies.jpg'), price: '$16', rating: '4.3' },
+    { label: 'Gulab Jamun', source: require('../assets/images/Gulab Jamun.jpg'), price: '$14', rating: '4.7' },
+    { label: 'Rasmalai', source: require('../assets/images/Rasmalai.jpg'), price: '$13', rating: '4.8' },
+    { label: 'Apple Crumble', source: require('../assets/images/Apple Crumble.jpg'), price: '$17', rating: '4.4' }
+     ].map((item, index) => (
+      <View key={index} style={styles.imageContainer}>
+      <Image source={item.source} style={styles.imageStyle} />
+      <Text style={styles.imageText}>{item.label}</Text>
+       <Text style = {styles.priceText}>{item.price}</Text>
+    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text> 
+      </View>
+        ))}
+      </View>
+      </ScrollView>
+      </View>
+      
       </ScrollView>
       </LinearGradient>
   );
