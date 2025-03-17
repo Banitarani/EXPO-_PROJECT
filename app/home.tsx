@@ -8,7 +8,6 @@ import { auth } from '@/FirebaseConfig';
 const Home = () => {
   const [email, setEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-   const [filter, setFilter] = useState('All');
   const { width } = useWindowDimensions();
   const router = useRouter();
   // ScrollView reference
@@ -17,14 +16,37 @@ const Home = () => {
   const lunchRef = useRef(null);
   const breakfastRef = useRef(null);
   const dinnerRef = useRef(null);
+  const dessertRef = useRef(null);
+  const fastfoodRef = useRef(null);
+  const festiveRef = useRef(null);
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
       setEmail(user.email || '');
     }
   }, []);
-  const handleSearch = () => {
+  const handleSearch = () => {//it is use for search by using useref
+    if (searchQuery.toLowerCase().includes('breakfast')){
+      scrollToSection(breakfastRef);
+    }
+    else if (searchQuery.toLowerCase().includes('lunch')){
+      scrollToSection(lunchRef);
+    }
+    else if(searchQuery.toLowerCase().includes('dinner')){
+      scrollToSection(dinnerRef);
+    }
+    else if(searchQuery.toLowerCase().includes('dessert')){
+      scrollToSection(dessertRef);
+    }
+    else if (searchQuery.toLowerCase().includes('fastfood')){
+     scrollToSection(fastfoodRef);
+    }
+    else if (searchQuery.toLowerCase().includes('festive')){
+      scrollToSection(festiveRef)
+    }
+    else{
     console.log(`Searching for: ${searchQuery}`);
+    }
   };
   const goToProfile = () => {
     router.push('/signup');
@@ -48,7 +70,7 @@ const Home = () => {
     searchInput: { flex: 1, fontSize: 18 },
     searchResultsText: { fontSize: 18, color: '#444' },
     imageRow: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
-    imageContainer: { alignItems: 'center', marginBottom: 20, width: width / 4 },
+    imageContainer: { alignItems: 'center', marginBottom: 20, width: width / 3.5 },
     imageStyle: { width: 70, height: 70, borderRadius: 35, borderWidth: 2, borderColor: 'white' },
     imageText: { marginTop: 5, fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' },
     sectionContainer: { marginTop: 20 },
@@ -58,8 +80,8 @@ const Home = () => {
   cartButton: { backgroundColor: 'blue', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 20 },
   cartButtonText: { color: 'white', fontSize: 18, fontWeight: 'bold' }
   });
-  return (
-    <LinearGradient colors={['#FFDAB9', '#FF7F50', '#FF4500']} style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
+  return (//savery sunset gradient color
+    <LinearGradient colors={['#FFDAB9', '#FF7F50', '#FF4500']} style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
     <ScrollView ref={scrollViewRef} contentContainerStyle={{ padding: 20 }}>
     {/* Header */}
     <View style={styles.headerRow}>
@@ -71,11 +93,11 @@ const Home = () => {
     </TouchableOpacity>
     </View>
     {/* Welcome Text */}
-    <Text style={styles.welcomeText}>Hi {email}, welcome!</Text>
+    <Text style={styles.welcomeText}>Hi {email}, welcome! {''} 😊..</Text>
     <Text style={styles.tagline}>
           Make your own food, stay at 
              {''} <Text style={{ color: 'red' }}>home</Text> {''}
-           and enjoy <Text style={{ color: 'green' }}>20% OFF!</Text>
+           and enjoy <Text style={{ color: 'green' }}>20% OFF!</Text> 
         </Text>
     {/* Search Bar */}
     <View style={styles.searchBarContainer}>
@@ -96,9 +118,9 @@ const Home = () => {
     { label: 'Breakfast', source: require('../assets/images/breakfast.jpeg'),ref: breakfastRef, },
     { label: 'Lunch', source: require('../assets/images/lunch.jpeg'), ref: lunchRef },
     { label: 'Dinner', source: require('../assets/images/dinner.jpeg'), ref:dinnerRef},
-    { label: 'Dessert', source: require('../assets/images/desert.jpeg') },
-    { label: 'Fast Food', source: require('../assets/images/fastfood.jpeg') },
-    { label: 'Festive', source: require('../assets/images/festive.jpeg') },
+    { label: 'Dessert', source: require('../assets/images/desert.jpeg'), ref:dessertRef },
+    { label: 'Fast Food', source: require('../assets/images/fastfood.jpeg'),ref:fastfoodRef },
+    { label: 'Festive', source: require('../assets/images/festive.jpeg') , ref:festiveRef},
     { label: 'Soup', source: require('../assets/images/soup.jpeg') },
     { label: 'Seafood', source: require('../assets/images/seafood.jpeg') },
     { label: 'Snacks', source: require('../assets/images/snacks.jpeg') },
@@ -132,7 +154,7 @@ const Home = () => {
     <Image source={item.source} style={styles.imageStyle} />
     <Text style={styles.imageText}>{item.label}</Text>
     <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐ {item.rating}</Text>
+    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text>
     </View>
     ))}
     </View>
@@ -157,7 +179,7 @@ const Home = () => {
     <Image source={item.source} style={styles.imageStyle} />
     <Text style={styles.imageText}>{item.label}</Text>
     <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐ {item.rating}</Text>
+    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text>
     </View>
       ))}
     </View>
