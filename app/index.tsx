@@ -7,7 +7,7 @@ const Index = () => {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push('/home');
+    router.push('/login');
   };
 
   return (

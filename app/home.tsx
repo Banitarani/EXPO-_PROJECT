@@ -9,6 +9,7 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const { width } = useWindowDimensions();
+  const [isPressed, setIsPressed] = useState(false);
   const router = useRouter();
   // ScrollView reference
   const scrollViewRef = useRef(null);
@@ -48,8 +49,13 @@ const Home = () => {
     console.log(`Searching for: ${searchQuery}`);
     }
   };
-  const goToProfile = () => {
-    router.push('/signup');
+  const Notification = () => {
+    if (isPressed) {
+      alert('Notification off!');
+    } else {
+      alert('Notification on!');
+    }
+    setIsPressed(!isPressed);
   };
   const goToIndex = () => {
     router.push('/');
@@ -85,12 +91,16 @@ const Home = () => {
     <ScrollView ref={scrollViewRef} contentContainerStyle={{ padding: 20 }}>
     {/* Header */}
     <View style={styles.headerRow}>
-    <TouchableOpacity onPress={goToProfile}>
-    <Ionicons name="person-circle-outline" size={35} color="blue" />
-    </TouchableOpacity>
     <TouchableOpacity onPress={goToIndex}>
     <Ionicons name="arrow-back-circle-outline" size={35} color="blue" />
     </TouchableOpacity>
+    <TouchableOpacity onPress={Notification}>
+        <Ionicons
+          name={isPressed ? "notifications" : "notifications-outline"} // Full or empty bell
+          size={35}
+          color="blue"
+        />
+      </TouchableOpacity>
     </View>
     {/* Welcome Text */}
     <Text style={styles.welcomeText}>Hi {email}, welcome! {''} 😊..</Text>

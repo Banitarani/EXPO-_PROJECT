@@ -1,19 +1,41 @@
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-const RootLayout = () => {
+export default function TabLayout() {
   return (
-    <GestureHandlerRootView>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="welcome" />
-        <Stack.Screen name="index" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="home" />
-      </Stack>
-      <StatusBar backgroundColor="white" style="dark" />
-    </GestureHandlerRootView>
+    <Tabs screenOptions={{ headerShown: false }}>
+      <Tabs.Screen 
+        name="home" 
+        options={{ 
+          tabBarIcon: () => (
+            <Ionicons name="home" color="blue" size={24} />
+          ),
+        }} 
+      />
+      <Tabs.Screen 
+        name="index" 
+        options={{ 
+          tabBarIcon: () => (
+            <Ionicons name="list" color="blue" size={24} />
+          ),
+        }} 
+      />
+      <Tabs.Screen 
+        name="login" 
+        options={{ 
+          tabBarIcon: () => (
+            <Ionicons name="log-in" color="blue" size={24} />
+          ),
+        }} 
+      />
+      <Tabs.Screen 
+        name="signup" 
+        options={{ 
+          tabBarIcon: () => (
+            <Ionicons name="person-add-outline" color="blue" size={24} />
+          ),
+        }} 
+      />
+    </Tabs>
   );
-};
-
-export default RootLayout;
+}
