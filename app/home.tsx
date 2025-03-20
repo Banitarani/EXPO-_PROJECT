@@ -4,17 +4,29 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { auth } from '@/FirebaseConfig';
+import { Modal } from 'react-native';
+
+function setSelectedItem(item: any) {
+  throw new Error('Function not implemented.');
+}
+
+function setModalVisible(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
 
 const Home = () => {
   const [email, setEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const { width } = useWindowDimensions();
   const [isPressed, setIsPressed] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const router = useRouter();
   // ScrollView reference
   const scrollViewRef = useRef(null);
   // Section references
-  const lunchRef = useRef(null);
+  const lunchRef = useRef(null);// using useRef we can directly go to specific section ,like link with products
   const breakfastRef = useRef(null);
   const dinnerRef = useRef(null);
   const dessertRef = useRef(null);
@@ -67,6 +79,12 @@ const Home = () => {
       });
     }
   };
+  const handleItemPress = (item: any) => {
+    setSelectedItem(item);
+    setModalVisible(true);
+  }; 
+  
+  
   const styles = StyleSheet.create({
     headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: 10 },
     welcomeText: { fontSize: 20, fontWeight: 'bold' },
@@ -83,8 +101,13 @@ const Home = () => {
     sectionTitle: { fontWeight: 'bold', color: 'black', fontSize: 22, marginBottom: 10, textAlign: 'left' },
     priceText: { color: 'black', fontSize: 14, fontWeight: 'bold' },
     ratingText: { fontSize: 16, color: 'yellow' },
-  cartButton: { backgroundColor: 'blue', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 20 },
-  cartButtonText: { color: 'white', fontSize: 18, fontWeight: 'bold' }
+    modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
+    modalContent: { backgroundColor: 'white', padding: 20, borderRadius: 10, alignItems: 'center' },
+    modalImage: { width: 200, height: 200, borderRadius: 10 },
+    modalText: { fontSize: 20, fontWeight: 'bold', marginVertical: 10 },
+    closeButton: { marginTop: 10, backgroundColor: 'red', padding: 10, borderRadius: 5 },
+    closeButtonText: { color: 'white', fontWeight: 'bold' },
+    tagtext : {color:'black' , fontWeight:'bold',fontSize:25}
   });
   return (//savery sunset gradient color
     <LinearGradient colors={['#FFDAB9', '#FF7F50', '#FF4500']} style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
@@ -109,6 +132,7 @@ const Home = () => {
              {''} <Text style={{ color: 'red' }}>home</Text> {''}
            and enjoy <Text style={{ color: 'green' }}>20% OFF!</Text> 
         </Text>
+        {''}
     {/* Search Bar */}
     <View style={styles.searchBarContainer}>
     <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
@@ -123,6 +147,7 @@ const Home = () => {
      {/* Search Results */}
      <Text style={styles.searchResultsText}>{searchQuery ? `Searching for: "${searchQuery}"` : ''}</Text>
     {/* Categories */}
+    <Text style={styles.tagtext}> What's on your mind !</Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.imageRow}>
     {[
     { label: 'Breakfast', source: require('../assets/images/breakfast.jpeg'),ref: breakfastRef, },
@@ -142,9 +167,10 @@ const Home = () => {
     <Image source={item.source} style={styles.imageStyle} />
     <Text style={styles.imageText}>{item.label}</Text>
     </View>
-    </TouchableOpacity>
+    </TouchableOpacity>//We use .map() to loop through an array and create dynamic components for each item efficiently
           ))}
     </ScrollView>
+    
     {/* Breakfast Section */}
     <View style={styles.sectionContainer} ref={breakfastRef}>
     <Text style={styles.sectionTitle}>Breakfast</Text>
@@ -160,18 +186,37 @@ const Home = () => {
     { label: 'Avocado-toast', source: require('../assets/images/avocado.jpg'),price:'$20',rating:5.0  },
     { label: 'Bagels', source: require('../assets/images/bagels.jpg') ,price:'$50',rating:4.7 },
       ].map((item, index) => (
-    <View key={index} style={styles.imageContainer}>
-    <Image source={item.source} style={styles.imageStyle} />
-    <Text style={styles.imageText}>{item.label}</Text>
-    <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text>
-    </View>
+        <TouchableOpacity key={index} onPress={() => handleItemPress(item)}>
+        <View style={styles.imageContainer}>
+          <Image source={item.source} style={styles.imageStyle} />
+          <Text style={styles.imageText}>{item.label}</Text>
+        </View>
+      </TouchableOpacity>
     ))}
     </View>
     </ScrollView>
     </View>
+
+    <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedItem && (
+                <>
+                  <Image source={selectedItem.source} style={styles.modalImage} />
+                  <Text style={styles.modalText}>{selectedItem.label}</Text>
+                  <Text style={{ fontSize: 18 }}>Price: {selectedItem.price}</Text>
+                  <Text style={{ fontSize: 16 }}>⭐ Rating: {selectedItem.rating}</Text>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </Modal>
+
     {/* Lunch Section */}
-    <View style={styles.sectionContainer} ref={lunchRef}>
+    <View style={styles.sectionContainer} ref={lunchRef}>    
     <Text style={styles.sectionTitle}>Lunch</Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
     <View style={styles.imageRow}>
@@ -185,16 +230,33 @@ const Home = () => {
     { label: 'Veggie Burger', source: require('../assets/images/veggie-burgur.jpg'),price:'$65',rating:4.4  },
     { label: 'veg-thali', source: require('../assets/images/veg-thali.jpg'),price:'$95',rating:4.1  },        
     ].map((item, index) => (
-    <View key={index} style={styles.imageContainer}>
-    <Image source={item.source} style={styles.imageStyle} />
-    <Text style={styles.imageText}>{item.label}</Text>
-    <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text>
-    </View>
+      <TouchableOpacity key={index} onPress={() => handleItemPress(item)}>
+      <View style={styles.imageContainer}>
+        <Image source={item.source} style={styles.imageStyle} />
+        <Text style={styles.imageText}>{item.label}</Text>
+      </View>
+    </TouchableOpacity>
       ))}
     </View>
     </ScrollView>
     </View>
+    <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedItem && (
+                <>
+                  <Image source={selectedItem.source} style={styles.modalImage} />
+                  <Text style={styles.modalText}>{selectedItem.label}</Text>
+                  <Text style={{ fontSize: 18 }}>Price: {selectedItem.price}</Text>
+                  <Text style={{ fontSize: 16 }}>⭐ Rating: {selectedItem.rating}</Text>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </Modal>
     {/* Dinner Section */}
     <View style={styles.sectionContainer} ref={dinnerRef}>
     <Text style={styles.sectionTitle}>Dinner</Text>
@@ -210,16 +272,34 @@ const Home = () => {
     { label: 'Cottage Cheese Wrap', source: require('../assets/images/Cottage Cheese Wrap.jpg'), price: '$29', rating: '3.9' },
     { label: 'Mac and Cheese', source: require('../assets/images/Mac and Cheese.jpg'), price: '$27', rating: '4.4' }
      ].map((item, index) => (
-      <View key={index} style={styles.imageContainer}>
-      <Image source={item.source} style={styles.imageStyle} />
-      <Text style={styles.imageText}>{item.label}</Text>
-       <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text> 
-      </View>
+      <TouchableOpacity key={index} onPress={() => handleItemPress(item)}>
+        <View style={styles.imageContainer}>
+          <Image source={item.source} style={styles.imageStyle} />
+          <Text style={styles.imageText}>{item.label}</Text>
+        </View>
+      </TouchableOpacity>
         ))}
       </View>
       </ScrollView>
       </View>
+      <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedItem && (
+                <>
+                  <Image source={selectedItem.source} style={styles.modalImage} />
+                  <Text style={styles.modalText}>{selectedItem.label}</Text>
+                  <Text style={{ fontSize: 18 }}>Price: {selectedItem.price}</Text>
+                  <Text style={{ fontSize: 16 }}>⭐ Rating: {selectedItem.rating}</Text>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </Modal>
+      {/*dessert section */}
       <View style={styles.sectionContainer} ref={dessertRef}>
     <Text style={styles.sectionTitle}>Dessert</Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -235,19 +315,37 @@ const Home = () => {
     { label: 'Rasmalai', source: require('../assets/images/Rasmalai.jpg'), price: '$13', rating: '4.8' },
     { label: 'Apple Crumble', source: require('../assets/images/Apple Crumble.jpg'), price: '$17', rating: '4.4' }
      ].map((item, index) => (
-      <View key={index} style={styles.imageContainer}>
-      <Image source={item.source} style={styles.imageStyle} />
-      <Text style={styles.imageText}>{item.label}</Text>
-       <Text style = {styles.priceText}>{item.price}</Text>
-    <Text style={styles.ratingText}>⭐⭐ {item.rating}</Text> 
-      </View>
+      <TouchableOpacity key={index} onPress={() => handleItemPress(item)}>
+        <View style={styles.imageContainer}>
+          <Image source={item.source} style={styles.imageStyle} />
+          <Text style={styles.imageText}>{item.label}</Text>
+        </View>
+      </TouchableOpacity>
         ))}
       </View>
       </ScrollView>
       </View>
+      <Modal visible={modalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedItem && (
+                <>
+                  <Image source={selectedItem.source} style={styles.modalImage} />
+                  <Text style={styles.modalText}>{selectedItem.label}</Text>
+                  <Text style={{ fontSize: 18 }}>Price: {selectedItem.price}</Text>
+                  <Text style={{ fontSize: 16 }}>⭐ Rating: {selectedItem.rating}</Text>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </Modal>
       
       </ScrollView>
       </LinearGradient>
   );
 };
 export default Home;
+
