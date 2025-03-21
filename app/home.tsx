@@ -12,7 +12,7 @@ function setSelectedItem(item: any) {
 
 function setModalVisible(arg0: boolean) {
   throw new Error('Function not implemented.');
-}
+}// create these function for model . and called in model section of each and every catagory . 
 
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -342,10 +342,13 @@ const Home = () => {
             </View>
           </View>
         </Modal>
-      
+        
+
       </ScrollView>
       </LinearGradient>
+      
   );
 };
+
 export default Home;
 
