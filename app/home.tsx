@@ -6,14 +6,30 @@ import { Ionicons } from '@expo/vector-icons';
 import { auth } from '@/FirebaseConfig';
 import { Modal } from 'react-native';
 
-function setSelectedItem(item: any) {
+function setSelectedItem(item: any) {// function for modal select
   throw new Error('Function not implemented.');
 }
-
-function setModalVisible(arg0: boolean) {
+function setModalVisible(arg0: boolean) { // function for modal 
   throw new Error('Function not implemented.');
 }// create these function for model . and called in model section of each and every catagory . 
-
+const faqData = [
+  { 
+    question: "How can I place an order?", 
+    answer: "To place an order, select your favorite food items, add them to the cart, and proceed to checkout." 
+  },
+  { 
+    question: "Do you offer home delivery?", 
+    answer: "Yes, we offer home delivery within select areas. Delivery charges may apply." 
+  },
+  { 
+    question: "Can I customize my order?", 
+    answer: "Yes, you can add special instructions or customize your order while checking out." 
+  },
+  { 
+    question: "What payment methods are available?", 
+    answer: "We accept credit/debit cards, PayPal, and UPI payments." 
+  }
+];
 const Home = () => {
   const [email, setEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,12 +37,16 @@ const Home = () => {
   const [isPressed, setIsPressed] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const [faqVisible , setFaqVisible] = useState(null);
+  
+  const toggleFAQ = (index: number | React.SetStateAction<null>) => {
+    setFaqVisible(faqVisible === index ? null : index);
+  };
   const router = useRouter();
   // ScrollView reference
   const scrollViewRef = useRef(null);
   // Section references
-  const lunchRef = useRef(null);// using useRef we can directly go to specific section ,like link with products
+  const lunchRef = useRef(null);// using useRef we can directly go to specific section ,like link in html
   const breakfastRef = useRef(null);
   const dinnerRef = useRef(null);
   const dessertRef = useRef(null);
@@ -84,7 +104,7 @@ const Home = () => {
     setModalVisible(true);
   }; 
   
-  
+  // react-native stylesheet used:
   const styles = StyleSheet.create({
     headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: 10 },
     welcomeText: { fontSize: 20, fontWeight: 'bold' },
@@ -107,7 +127,12 @@ const Home = () => {
     modalText: { fontSize: 20, fontWeight: 'bold', marginVertical: 10 },
     closeButton: { marginTop: 10, backgroundColor: 'red', padding: 10, borderRadius: 5 },
     closeButtonText: { color: 'white', fontWeight: 'bold' },
-    tagtext : {color:'black' , fontWeight:'bold',fontSize:25}
+    tagtext : {color:'black' , fontWeight:'bold',fontSize:25},
+    faqTitle: {fontSize: 22, fontWeight: 'bold', color: 'red', marginBottom: 10},
+    faqItem: {backgroundColor: '#FFF',borderRadius: 10,padding: 15,marginBottom: 10,shadowColor: "#000",shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 4,elevation: 2},
+    faqHeader: {flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center'},
+    faqQuestion: {fontSize: 18,fontWeight: 'bold'  , color: "blue"},
+    faqAnswer: {fontSize: 16,color: 'black',marginTop: 10 },
   });
   return (//savery sunset gradient color
     <LinearGradient colors={['#FFDAB9', '#FF7F50', '#FF4500']} style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
@@ -196,7 +221,6 @@ const Home = () => {
     </View>
     </ScrollView>
     </View>
-
     <Modal visible={modalVisible} transparent animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -214,7 +238,6 @@ const Home = () => {
             </View>
           </View>
         </Modal>
-
     {/* Lunch Section */}
     <View style={styles.sectionContainer} ref={lunchRef}>    
     <Text style={styles.sectionTitle}>Lunch</Text>
@@ -342,13 +365,26 @@ const Home = () => {
             </View>
           </View>
         </Modal>
-        
-
+        <View style={styles.sectionContainer}>
+          <Text style={styles.faqTitle}> (FAQ)</Text>
+          {faqData.map((item, index) => (
+            <TouchableOpacity key={index} onPress={() => toggleFAQ(index)} style={styles.faqItem}>
+              <View style={styles.faqHeader}>
+                <Text style={styles.faqQuestion}>{item.question}</Text>
+                <Ionicons 
+                  name={faqVisible === index ? "chevron-up" : "chevron-down"} //chevron-up  and chevron-down  it is used for arrow showing in question section for up and down.
+                  size={20} 
+                  color="black" 
+                />
+              </View>
+              {faqVisible === index && (
+                <Text style={styles.faqAnswer}>{item.answer}</Text>
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
       </LinearGradient>
-      
   );
 };
-
 export default Home;
-
