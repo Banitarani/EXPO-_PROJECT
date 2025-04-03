@@ -28,7 +28,7 @@ const faqData = [
   { 
     question: "What payment methods are available?", 
     answer: "We accept credit/debit cards, PayPal, and UPI payments." 
-  }
+  } 
 ];
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -325,7 +325,7 @@ const Home = () => {
       {/*dessert section */}
       <View style={styles.sectionContainer} ref={dessertRef}>
     <Text style={styles.sectionTitle}>Dessert</Text>
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>                                                                                                                                                                                   
     <View style={styles.imageRow}>
      {[
     { label: 'Chocolate Lava Cake', source: require('../assets/images/Chocolate Lava Cake.jpg'), price: '$15', rating: '4.8' },
